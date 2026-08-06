@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useAccount, useConnect, useWalletClient } from 'wagmi';
 import { useAccountData } from '../hooks/useAccountData';
 import { useAgentStore } from '../store/agentStore';
-import { Zap, Search, PanelLeft, PanelRight, ChevronDown, Check } from 'lucide-react';
+import { Zap, Search, PanelLeft, PanelRight, ChevronDown, Check, X, BookOpen, Eye, EyeOff } from 'lucide-react';
 import { ExchangeClient, HttpTransport } from '@nktkas/hyperliquid';
 import { AbstractWallet } from '@nktkas/hyperliquid/signing';
 
@@ -221,10 +221,11 @@ export function Terminal() {
         <div className="flex items-center gap-1.5 ml-auto border-l border-border pl-4">
           <button 
             onClick={() => setShowOrderbook(!showOrderbook)}
-            className={`p-1.5 rounded transition-colors ${showOrderbook ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
-            title="Toggle Orderbook"
+            className={`flex items-center gap-1.5 px-2.5 py-1 text-xs rounded transition-colors ${showOrderbook ? 'bg-secondary text-foreground font-medium' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
+            title={showOrderbook ? "Hide Order Book" : "Show Order Book"}
           >
-            <PanelLeft className="w-4 h-4" />
+            {showOrderbook ? <EyeOff className="w-3.5 h-3.5 text-muted-foreground" /> : <Eye className="w-3.5 h-3.5 text-primary" />}
+            <span className="hidden sm:inline">{showOrderbook ? "Hide Book" : "Show Book"}</span>
           </button>
           <button 
             onClick={() => setShowOrderPanel(!showOrderPanel)}
@@ -240,8 +241,18 @@ export function Terminal() {
       <div className="flex-1 flex overflow-hidden">
         {/* Chart Column */}
         <div className="flex-1 border-r border-border flex flex-col bg-card min-w-0 transition-all">
-          <div className="h-10 border-b border-border flex items-center px-4 text-xs font-medium text-muted-foreground">
-             Chart
+          <div className="h-10 border-b border-border flex items-center justify-between px-4 text-xs font-medium text-muted-foreground">
+             <span>Chart</span>
+             {!showOrderbook && (
+               <button
+                 onClick={() => setShowOrderbook(true)}
+                 className="flex items-center gap-1 text-[11px] bg-secondary/80 hover:bg-secondary text-foreground px-2 py-0.5 rounded transition-colors"
+                 title="Show Order Book"
+               >
+                 <BookOpen className="w-3 h-3 text-primary" />
+                 Show Order Book
+               </button>
+             )}
           </div>
           <div className="flex-1 flex items-center justify-center border-b border-border overflow-hidden bg-black/40">
             <Chart market={market.name} />
@@ -261,8 +272,18 @@ export function Terminal() {
         {/* Orderbook Column */}
         {showOrderbook && (
           <div className="w-72 border-r border-border flex flex-col bg-card shrink-0">
-            <div className="h-10 border-b border-border flex items-center px-4 text-xs font-medium text-muted-foreground">
-              Order Book
+            <div className="h-10 border-b border-border flex items-center justify-between px-4 text-xs font-medium text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5" />
+                Order Book
+              </span>
+              <button
+                onClick={() => setShowOrderbook(false)}
+                className="p-1 hover:bg-secondary rounded hover:text-foreground transition-colors"
+                title="Hide Order Book"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
             </div>
             <div className="flex-1 overflow-hidden bg-black/20">
                <OrderBook market={market.name} />
