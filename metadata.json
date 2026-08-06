@@ -1,0 +1,6 @@
+{
+  "name": "Hyperliquid Terminal",
+  "description": "A professional trading terminal for Hyperliquid perpetuals and spot markets.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
