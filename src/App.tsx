@@ -8,7 +8,7 @@ import { useUiStore } from './store/uiStore';
 import { Terminal } from './pages/Terminal';
 import { Markets } from './pages/Markets';
 import { Portfolio } from './pages/Portfolio';
-import { Activity, LayoutDashboard, Wallet, User as UserIcon, LogOut } from 'lucide-react';
+import { Activity, LayoutDashboard, Wallet, User as UserIcon, LogOut, Sun, Moon } from 'lucide-react';
 import { auth, googleProvider, signInWithPopup, signOut, onAuthStateChanged } from './lib/firebase';
 import { User } from 'firebase/auth';
 
@@ -111,7 +111,15 @@ function FirebaseAuth() {
 
 function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
-  const { isTestnet, setIsTestnet } = useUiStore();
+  const { isTestnet, setIsTestnet, theme, setTheme } = useUiStore();
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-background">
@@ -139,6 +147,13 @@ function Layout({ children }: { children: React.ReactNode }) {
             <span className={!isTestnet ? 'text-primary' : 'text-muted-foreground'}>Mainnet</span>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+              title="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
             <FirebaseAuth />
             <WalletConnect />
           </div>

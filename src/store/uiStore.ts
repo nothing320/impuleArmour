@@ -8,6 +8,8 @@ interface UiState {
   setSelectedMarket: (val: string) => void;
   chartTimeframe: string;
   setChartTimeframe: (val: string) => void;
+  theme: 'light' | 'dark';
+  setTheme: (val: 'light' | 'dark') => void;
 }
 
 export const useUiStore = create<UiState>()(
@@ -19,6 +21,8 @@ export const useUiStore = create<UiState>()(
       setSelectedMarket: (selectedMarket) => set({ selectedMarket }),
       chartTimeframe: '15m',
       setChartTimeframe: (chartTimeframe) => set({ chartTimeframe }),
+      theme: 'dark',
+      setTheme: (theme) => set({ theme }),
     }),
     {
       name: 'hl-terminal-ui',
